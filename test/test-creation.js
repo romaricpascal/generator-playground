@@ -30,6 +30,7 @@ describe('playground generator', function () {
 
     beforeEach(function (done) {
 
+      this.app.options['skip-install'] = true;
       this.app.run({}, function () {
         done();
       });
@@ -39,7 +40,9 @@ describe('playground generator', function () {
       var expected = [
         'index.html',
         'js/app.js',
-        'css/style.css'
+        'css/style.css',
+        'Gruntfile.js',
+        'package.json'
       ];
 
       helpers.assertFiles(expected);
