@@ -4,13 +4,17 @@
 var path = require('path');
 var fs = require('fs');
 var helpers = require('yeoman-generator').test;
-var testDirectory = path.join(__dirname, 'temp');
+var temp = require('temp');
+var testDirectory = temp.mkdirSync();
 var assert = require('assert');
+var exec = require('child_process').exec;
+
+console.log('Test directory: ', testDirectory);
 
 
 describe('playground generator', function () {
 
-  beforeEach(function (done) {
+  before(function (done) {
 
     helpers.testDirectory(testDirectory, function (err) {
 
@@ -19,16 +23,20 @@ describe('playground generator', function () {
       }
 
       this.app = helpers.createGenerator('playground:app', [
-        '../../app'
+        path.resolve(__dirname, '../app')
       ]);
       done();
 
     }.bind(this));
   });
 
+  after(function () {
+    temp.cleanup();
+  });
+
   describe('Default scaffolding', function () {
 
-    beforeEach(function (done) {
+    before(function (done) {
 
       this.app.options['skip-install'] = true;
       this.app.run({}, function () {
@@ -63,6 +71,21 @@ describe('playground generator', function () {
 
         assert.ok(containsCSSLink, 'Missing link to CSS file');
         assert.ok(containsJSLink, 'Missing link to JS file');
+      });
+    });
+
+    it('initialises a Git repository', function (done) {
+
+      exec('git log -1 --pretty=%s', {cwd: testDirectory}, function (err, stdout, stderr) {
+
+        if (err) {
+          console.log(err);
+          assert.fail('An error occured when checking git logs');
+        }
+
+        assert.equal(stdout.trim(), 'Created playground'.trim());
+
+        done();
       });
     });
   });
