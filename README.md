@@ -57,3 +57,7 @@ Have fun coding!
 ## License
 
 [MIT License](http://en.wikipedia.org/wiki/MIT_License)
+
+## Release History
+ 
+ - 2013-12-23   v0.1.0   Initial functionnalities
