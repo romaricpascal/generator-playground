@@ -63,8 +63,10 @@ PlaygroundGenerator.prototype.gitCommit = function gitCommit() {
 
     if (err === 127) {
       this.log('Could not find the ' + chalk.yellow.bold('git') + ' command. Make sure Git is installed on this machine');
+      return;
     }
 
+    this.log(chalk.green('complete') + ' Git repository has been setup');
     done();
-  });
+  }.bind(this));
 };
