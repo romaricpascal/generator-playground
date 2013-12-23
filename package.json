@@ -29,7 +29,8 @@
     "temp": "~0.6.0"
   },
   "peerDependencies": {
-    "yo": ">=1.0.0"
+    "yo": ">=1.0.0",
+    "bower": ">=1.0.0"
   },
   "engines": {
     "node": ">=0.8.0",

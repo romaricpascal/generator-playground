@@ -5,30 +5,12 @@ var path = require('path');
 var fs = require('fs');
 var helpers = require('yeoman-generator').test;
 var temp = require('temp');
-var testDirectory = temp.mkdirSync();
 var assert = require('assert');
 var exec = require('child_process').exec;
+var async = require('async');
 
-console.log('Test directory: ', testDirectory);
-
-
+// # TESTS
 describe('playground generator', function () {
-
-  before(function (done) {
-
-    helpers.testDirectory(testDirectory, function (err) {
-
-      if (err) {
-        return done(err);
-      }
-
-      this.app = helpers.createGenerator('playground:app', [
-        path.resolve(__dirname, '../app')
-      ]);
-      done();
-
-    }.bind(this));
-  });
 
   after(function () {
     temp.cleanup();
@@ -38,10 +20,10 @@ describe('playground generator', function () {
 
     before(function (done) {
 
-      this.app.options['skip-install'] = true;
-      this.app.run({}, function () {
-        done();
-      });
+      runGenerator(this, {
+        includeNormalize: true,
+        includeJQuery: true
+      }, done);
     });
 
     it('creates expected files', function () {
@@ -50,15 +32,16 @@ describe('playground generator', function () {
         'js/app.js',
         'css/style.css',
         'Gruntfile.js',
-        'package.json'
+        'package.json',
+        'bower.json'
       ];
 
       helpers.assertFiles(expected);
     });
 
-    it('links the JS and CSS file in the HTML', function () {
+    it('links the JS and CSS file in the HTML', function (done) {
 
-      fs.readFile(path.join(testDirectory, 'index.html'), {
+      fs.readFile(path.join(this.workspace, 'index.html'), {
         encoding: 'utf8'
       }, function (err, html) {
 
@@ -71,12 +54,13 @@ describe('playground generator', function () {
 
         assert.ok(containsCSSLink, 'Missing link to CSS file');
         assert.ok(containsJSLink, 'Missing link to JS file');
+        done();
       });
     });
 
     it('initialises a Git repository', function (done) {
 
-      exec('git log -1 --pretty=%s', {cwd: testDirectory}, function (err, stdout, stderr) {
+      exec('git log -1 --pretty=%s', {cwd: this.workspace}, function (err, stdout) {
 
         if (err) {
           console.log(err);
@@ -90,4 +74,172 @@ describe('playground generator', function () {
     });
   });
 
+  describe('Normalize.css', function () {
+
+    it('includes normalize.css when accepting prompt', function (done) {
+
+      runGenerator(this, {
+        includeNormalize: true,
+        includeJQuery: true
+      }, function () {
+
+        async.parallel([
+          assertHTMLHasStylesheet(path.join(this.workspace, 'index.html'), 
+                                  'bower_components/normalize-css/normalize.css'),
+          assertBowerDependencyIsPresent(path.join(this.workspace, 'bower.json'), 'normalize-css')
+        ], function () {
+          done();
+        });
+      }.bind(this));
+    });
+
+    it('does not include normalize.css when declined prompt', function (done) {
+
+      runGenerator(this, {
+        includeNormalize: false,
+        includeJQuery: true
+      }, function () {
+
+        async.parallel([
+          assertHTMLHasStylesheet(path.join(this.workspace, 'index.html'), 
+                                  'bower_components/normalize-css/normalize.css', true),
+          assertBowerDependencyIsPresent(path.join(this.workspace, 'bower.json'), 'normalize-css', true)
+        ], function () {
+          done();
+        });
+      }.bind(this));
+    });
+  });
+
+  describe('jQuery', function () {
+
+    it('includes jQuery when accepting prompt', function (done) {
+
+      runGenerator(this, {
+        includeNormalize: true,
+        includeJQuery: true
+      }, function () {
+
+        async.parallel([
+          assertHTMLHasScript(path.join(this.workspace, 'index.html'), 
+                                  'bower_components/jquery/jquery.js'),
+          assertBowerDependencyIsPresent(path.join(this.workspace, 'bower.json'), 'jquery')
+        ], function () {
+          done();
+        });
+      }.bind(this));
+    });
+
+    it('includes jQuery when accepting prompt', function (done) {
+
+      runGenerator(this, {
+        includeNormalize: true,
+        includeJQuery: false
+      }, function () {
+
+        async.parallel([
+          assertHTMLHasScript(path.join(this.workspace, 'index.html'), 
+                                  'bower_components/jquery/jquery.js', true),
+          assertBowerDependencyIsPresent(path.join(this.workspace, 'bower.json'), 'jquery', true)
+        ], function () {
+          done();
+        });
+      }.bind(this));
+    });
+  });
 });
+
+// # HELPER FUNCTIONS
+function runGenerator(context, promptAnswers, done) {
+  
+  var workspace = context.workspace = temp.mkdirSync();
+  helpers.testDirectory(workspace, function (err) {
+
+    if (err) {
+      return done(err);
+    }
+
+    this.app = helpers.createGenerator('playground:app', [
+      path.resolve(__dirname, '../app')
+    ]);
+
+    helpers.mockPrompt(this.app, promptAnswers);
+
+    this.app.options['skip-install'] = true;
+
+    console.log('Default run');
+    this.app.run({}, function () {
+      done();
+    });
+
+  }.bind(context));
+}
+
+function assertHTMLHasStylesheet(htmlFile, stylesheetURL, not) {
+
+  return function (done) {
+    fs.readFile(htmlFile, {encoding: 'utf8'}, function (err, html) {
+
+      if (err) {
+        assert.fail(err);
+      }
+
+      var linkHTML = '<link rel="stylesheet" href="' + stylesheetURL + '">';
+      var containsLink = html.indexOf(linkHTML) !== -1;
+
+      if (not) {
+        containsLink = !containsLink;
+      }
+
+      assert.ok(containsLink);
+      done();
+    });
+  };
+}
+
+function assertHTMLHasScript(htmlFile, scriptURL, not) {
+
+  return function (done) {
+    fs.readFile(htmlFile, {encoding: 'utf8'}, function (err, html) {
+
+      if (err) {
+        assert.fail(err);
+      }
+
+      var scriptHTML = '<script src="' + scriptURL + '">';
+      var containsLink = html.indexOf(scriptHTML) !== -1;
+
+      if (not) {
+        containsLink = !containsLink;
+      }
+
+      assert.ok(containsLink);
+      done();
+    });
+  }; 
+}
+
+function assertBowerDependencyIsPresent(bowerJson, dependencyName, not) {
+
+  return function (done) {
+
+    fs.readFile(bowerJson, {encoding: 'utf8'}, function (err, json) {
+
+      if (err) {
+        assert.fail(err);
+      }
+
+      var contents = JSON.parse(json);
+
+      var hasDependency = contents.dependencies[dependencyName];
+
+      if (not) {
+        hasDependency = !hasDependency;
+      }
+
+      assert.ok(hasDependency);
+
+      done();
+    });
+  };
+}
