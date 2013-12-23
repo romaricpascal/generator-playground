@@ -15,7 +15,7 @@ Nice to have features that might land in the future:
 ## Getting Started
 
 First you'll need [Yeoman](http://yeoman.io). 
-Yeoman runs using [node.js]](http://nodejs.org/), so you'll need this installed on your machine.
+Yeoman runs using [node.js](http://nodejs.org/), so you'll need this installed on your machine.
 Installing node.js also brings in a handy package manager, [npm](https://npmjs.org),
 which makes Yeoman's install a one liner:
 
