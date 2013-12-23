@@ -39,6 +39,21 @@ $ yo playground
 
 The generator will work its magic and scaffold the necessary files and folders. You're ready to go!
 
+Start the express and livereload servers using `grunt server`. 
+This will also open your default browser to see index.html. 
+All that's left is popping up your favourite text editor and edit the `index.html`, `css/style.css` and/or `js/app.js`.
+
+You could even go with a crazy one liner to do all of this at once
+(might want to alias this if you plan on using it often):
+
+```
+$ yo playground && (sublime-text . index.html css/style.css js/app.js &) && grunt server
+```
+> Note: Replace the `sublime-text` command with the one corresponding to your editor,
+> maybe the one stored in the $EDITOR environment variable.
+
+Have fun coding!
+
 ## License
 
 [MIT License](http://en.wikipedia.org/wiki/MIT_License)
