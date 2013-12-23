@@ -26,7 +26,8 @@
   },
   "devDependencies": {
     "mocha": "~1.14.0",
-    "temp": "~0.6.0"
+    "temp": "~0.6.0",
+    "async": "~0.2.9"
   },
   "peerDependencies": {
     "yo": ">=1.0.0",
