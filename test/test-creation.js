@@ -60,6 +60,11 @@ describe('playground generator', function () {
 
     it('initialises a Git repository', function (done) {
 
+      exec('git status', {cwd: this.workspace}, function (err, stdout) {
+        console.log(err);
+        console.log(stdout);
+      });
+
       exec('git log -1 --pretty=%s', {cwd: this.workspace}, function (err, stdout) {
 
         if (err) {
