@@ -56,11 +56,23 @@ PlaygroundGenerator.prototype.createProjectFiles = function createProjectFiles()
 PlaygroundGenerator.prototype.gitCommit = function gitCommit() {
   var done = this.async();
 
-  this.log('\n\nSetting up Git. If this fails, try running ' +
-           chalk.yellow.bold('git init .') +
-           ' and make a first commit.');
-  exec('git init && git add . --all && git commit -m "Created playground"', function (err) {
+  var async = require('async');
+  async.series([
+    function (taskDone) {
+      console.log(chalk.blue('git ') + 'Creating git repository');
+      exec('git init', taskDone);
+    },
+    function (taskDone) {
+      console.log(chalk.blue('git ') + 'Adding files to commit');
+      exec('git add . --all', taskDone);
+    },
+    function (taskDone) {
+      console.log(chalk.blue('git ') + 'Committing');
+      exec('git commit -m "Created playground"', taskDone);
+    }
+  ], function (err) {
 
+    console.log(err);
     if (err === 127) {
       this.log('Could not find the ' + chalk.yellow.bold('git') + ' command. Make sure Git is installed on this machine');
       return;
