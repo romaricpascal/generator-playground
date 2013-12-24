@@ -60,4 +60,5 @@ Have fun coding!
 
 ## Release History
  
+ - 2013-12-24   v0.1.1   Fix to Travis CI build
  - 2013-12-23   v0.1.0   Initial functionnalities

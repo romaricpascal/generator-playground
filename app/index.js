@@ -56,18 +56,18 @@ PlaygroundGenerator.prototype.createProjectFiles = function createProjectFiles()
 PlaygroundGenerator.prototype.gitCommit = function gitCommit() {
   var done = this.async();
 
+  this.log('\n\nInitializing Git repository. If this fail, try running ' +
+           chalk.yellow.bold('git init') +
+           ' and make a first commit manually');
   var async = require('async');
   async.series([
     function (taskDone) {
-      console.log(chalk.blue('git ') + 'Creating git repository');
       exec('git init', taskDone);
     },
     function (taskDone) {
-      console.log(chalk.blue('git ') + 'Adding files to commit');
       exec('git add . --all', taskDone);
     },
     function (taskDone) {
-      console.log(chalk.blue('git ') + 'Committing');
       exec('git commit -m "Created playground"', taskDone);
     }
   ], function (err) {
