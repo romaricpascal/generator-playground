@@ -5,4 +5,7 @@ node_js:
 before_install:
   - currentfolder=${PWD##*/}
   - if [ "$currentfolder" != 'generator-playground' ]; then cd .. && eval "mv $currentfolder generator-playground" && cd generator-playground; fi
+  # Git config so test commits don't fail
+  - git config --global user.name travis
+  - git config --global user.email test@travis-ci.org
 
