@@ -14,24 +14,16 @@ Nice to have features that might land in the future:
 
 ## Getting Started
 
-First you'll need [Yeoman](http://yeoman.io). 
-Yeoman runs using [node.js](http://nodejs.org/), so you'll need this installed on your machine.
-Installing node.js also brings in a handy package manager, [npm](https://npmjs.org),
-which makes Yeoman's install a one liner:
-
-```
-$ npm install -g yo
-```
-
-Once you've got Yeoman setup, you'll need to install this generator. 
-npm to the rescue again:
+Yeoman runs using [node.js](http://nodejs.org), so you'll need it installed on your machine.
+Installing the generator is a matter of a simple `npm` command.
 
 ```
 $ npm install -g generator-playground
 ```
 
-This generator is now ready to use. Head over to the folder you wish to use it
-and type:
+Yeoman, Grunt and Bower, which are needed for the generator to work fine should have been installed
+automatically (yeah `package.json`'s `peerDependencies` section) and you should be ready to go.
+Head over to the folder you wish scaffold a project and type:
 
 ```
 $ yo playground
