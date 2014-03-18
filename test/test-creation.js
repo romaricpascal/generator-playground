@@ -127,7 +127,7 @@ describe('playground generator', function () {
 
         async.parallel([
           assertHTMLHasScript(path.join(this.workspace, 'index.html'), 
-                                  'bower_components/jquery/jquery.js'),
+                                  'bower_components/jquery/dist/jquery.js'),
           assertBowerDependencyIsPresent(path.join(this.workspace, 'bower.json'), 'jquery')
         ], function () {
           done();
@@ -144,7 +144,7 @@ describe('playground generator', function () {
 
         async.parallel([
           assertHTMLHasScript(path.join(this.workspace, 'index.html'), 
-                                  'bower_components/jquery/jquery.js', true),
+                                  'bower_components/jquery/dist/jquery.js', true),
           assertBowerDependencyIsPresent(path.join(this.workspace, 'bower.json'), 'jquery', true)
         ], function () {
           done();
