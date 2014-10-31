@@ -7,4 +7,5 @@ before_install:
   # Git config so test commits don't fail
   - git config --global user.name travis
   - git config --global user.email test@travis-ci.org
+  - mkdir /home/travis/tmp
 
