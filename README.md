@@ -52,6 +52,7 @@ Have fun coding!
 
 ## Release History
  
+ - 2014-10-31   v0.1.4   Fixed jQuery path in the index.html and generated bower.json when no lib is added
  - 2013-12-24   v0.1.1   Fix to Travis CI build
  - 2013-12-23   v0.1.0   Initial functionnalities
 
