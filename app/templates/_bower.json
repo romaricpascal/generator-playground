@@ -9,10 +9,12 @@
     "bower_components",
     "test",
     "tests"
-  ]<% if (includeNormalize || includeJQuery) {%>,
+  ]<% if (includeNormalize || includeJQuery || includeBootstrap) {%>,
   "dependencies": {<% if (includeNormalize) { %>
     "normalize-css": ">=2.1.3"<% if (includeJQuery) {%>,<%}%>
     <% } %><% if (includeJQuery) { %>
     "jquery": ">=2.0.3"
+  <% } %><% if (includeBootstrap) { %>
+    "bootstrap": ">=3.3.6"
   <% } %>}<% } %>
 }
