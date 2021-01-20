@@ -1,3 +1,5 @@
+> This repository is now [hosted on Gitlab](https://gitlab.com/romaricpascal/generator-playground). Please head there if you wish to contribute. Thanks 🙂
+
 # generator-playground [![Build Status](https://secure.travis-ci.org/rhumaric/generator-playground.png?branch=master)](https://travis-ci.org/rhumaric/generator-playground)
 
 > A generator for [Yeoman](http://yeoman.io) that scaffolds a simple web project for when you need to
