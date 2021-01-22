@@ -30,12 +30,18 @@ PlaygroundGenerator.prototype.promptForConfiguration = function promptForConfigu
     name: 'includeJQuery',
     message: 'Would you like to include jQuery?',
     default: true
+  }, {
+    type: 'confirm',
+    name: 'includeBootstrap',
+    message: 'Would you like to include Bootstrap?',
+    default: false
   }];
 
   this.prompt(prompts, function processAnswers(answers) {
 
     this.includeNormalize = answers.includeNormalize;
     this.includeJQuery = answers.includeJQuery;
+    this.includeBootstrap = answers.includeBootstrap;
 
     done();
   }.bind(this));
